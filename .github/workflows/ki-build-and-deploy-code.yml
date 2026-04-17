@@ -56,16 +56,6 @@ jobs:
           npm install ajv@8.12.0 ajv-keywords@5.1.0 --legacy-peer-deps --save
         working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
 
-      - name: Find culprit package
-        shell: pwsh
-        run: |
-          Get-ChildItem node_modules -Recurse -Include *.js |
-          Select-String "__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE" |
-          Select-Object -First 20 |
-          ForEach-Object { Write-Host $_.Path }
-        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
-        continue-on-error: true
-
       - name: Clear webpack cache
         run: |
           if exist node_modules\.cache rmdir /s /q node_modules\.cache
