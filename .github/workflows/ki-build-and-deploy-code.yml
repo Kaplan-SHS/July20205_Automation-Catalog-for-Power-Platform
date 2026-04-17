@@ -57,8 +57,11 @@ jobs:
         working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
 
       - name: Find culprit package
+        shell: pwsh
         run: |
-          powershell -Command "Get-ChildItem node_modules -Recurse -Include *.js | Select-String '__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE' | Select-Object -First 20 | ForEach-Object { $_.Filename + ': ' + $_.Line.Substring(0, [Math]::Min(100, $_.Line.Length)) }"
+          Get-ChildItem node_modules -Recurse -Include *.js |
+          Select-String "__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE" |
+          Select-Object -First 20 Path, LineNumber
         working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
         continue-on-error: true
 
