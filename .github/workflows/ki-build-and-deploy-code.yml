@@ -38,6 +38,13 @@ jobs:
           name: dropAPI
           path: ${{ github.workspace }}/dropAPI
 
+      - name: Find React 19 culprit
+        run: |
+          npm ls react 2>&1 | findstr "react@19" | head -20
+        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
+        shell: cmd
+        continue-on-error: true
+
   build-ui:
     runs-on: windows-latest
     steps:
