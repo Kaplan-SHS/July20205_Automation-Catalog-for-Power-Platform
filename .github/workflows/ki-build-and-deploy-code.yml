@@ -38,12 +38,6 @@ jobs:
           name: dropAPI
           path: ${{ github.workspace }}/dropAPI
 
-      - name: Find culprit package
-        run: |
-          powershell -Command "Get-ChildItem node_modules -Recurse -Include *.js | Select-String '__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE' | Select-Object -First 20 | ForEach-Object { $_.Filename + ': ' + $_.Line.Substring(0, [Math]::Min(100, $_.Line.Length)) }"
-        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
-        continue-on-error: true
-
   build-ui:
     runs-on: windows-latest
     steps:
@@ -61,6 +55,12 @@ jobs:
           npm install --legacy-peer-deps
           npm install ajv@8.12.0 ajv-keywords@5.1.0 --legacy-peer-deps --save
         working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
+
+      - name: Find culprit package
+        run: |
+          powershell -Command "Get-ChildItem node_modules -Recurse -Include *.js | Select-String '__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE' | Select-Object -First 20 | ForEach-Object { $_.Filename + ': ' + $_.Line.Substring(0, [Math]::Min(100, $_.Line.Length)) }"
+        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
+        continue-on-error: true
 
       - name: Clear webpack cache
         run: |
