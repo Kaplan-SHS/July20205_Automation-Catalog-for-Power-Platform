@@ -38,13 +38,6 @@ jobs:
           name: dropAPI
           path: ${{ github.workspace }}/dropAPI
 
-      - name: Find React 19 culprit
-        run: |
-          npm ls react 2>&1 | findstr "react@19" | head -20
-        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
-        shell: cmd
-        continue-on-error: true
-
   build-ui:
     runs-on: windows-latest
     steps:
@@ -58,8 +51,14 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install Packages
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
+
+      - name: Find React 19 culprit
+        run: npm ls react 2>&1 | findstr "react@19"
+        working-directory: AutomationCatalogForPowerPlatform/ACPP.Client
+        shell: cmd
+        continue-on-error: true
 
       - name: Build UI
         run: |
